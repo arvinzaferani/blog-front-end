@@ -1,29 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import CounterComponent from "./counter";
-import PostsComponent from "./components/PostsComponent";
+import HomeView from "./views/HomeView";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import SignupView from "./views/SignupView";
 
 function App() {
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <HomeView/>,
+        },
+        {
+            path: "/auth",
+            element: <SignupView/>,
+        },
+    ]);
   return (
-    <div className="App">
-        <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo"/>
-            <p>
-                Edit <code>src/App.tsx</code> and save to reload.
-            </p>
-            <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Learn React
-            </a>
-            <div><CounterComponent/></div>
-            <div><PostsComponent/></div>
-        </header>
-    </div>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 

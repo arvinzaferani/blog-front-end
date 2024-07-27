@@ -20,11 +20,11 @@ const initialState: DataSate = {
 }
 
 export const fetchData = createAsyncThunk('data/fetchData', async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+    const response = await axios.get('http://localhost:3002/api/items')
     return response.data
 })
 
-const dataSlice = createSlice({
+const postsSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {},
@@ -45,4 +45,4 @@ const dataSlice = createSlice({
     }
 
 })
- export default dataSlice.reducer
+ export default postsSlice.reducer

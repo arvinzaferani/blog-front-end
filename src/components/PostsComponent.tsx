@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {RootState, AppDispatch} from "../store/index.module";
-import {fetchData, Post} from "../features/dataSlice";
+import {fetchData, Post} from "../features/postsSlice";
 import PostComponent from "./PostComponent";
 
 const DataList: React.FC = () => {
