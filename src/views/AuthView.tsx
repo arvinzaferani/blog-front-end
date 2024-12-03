@@ -1,9 +1,8 @@
 import React from "react";
-import SignupComponent from "../components/SignupComponent";
-
+import {AuthComponent} from "../components/auth/AuthComponent";
 const SignupView:React.FC = () => {
     return(
-        <SignupComponent/>
+        <AuthComponent/>
     )
 }
 export default SignupView
