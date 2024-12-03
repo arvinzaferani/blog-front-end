@@ -1,11 +1,13 @@
 import {configureStore} from "@reduxjs/toolkit";
 import dataReducer from "../features/postsSlice";
-import signupReducer from "../features/signupSlice"
+import authReducer from "../features/authSlice";
+import postReducer from "../features/postsSlice";
 
 const store = configureStore({
     reducer: {
         data: dataReducer,
-        signup: signupReducer
+        auth: authReducer,
+        post: postReducer,
     }
 })
 export type RootState = ReturnType<typeof store.getState>
