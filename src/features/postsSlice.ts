@@ -1,48 +1,106 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import axios from "axios";
-export interface Post {
-    userId: number,
-    Id: number,
+import apiClient from "../service/axiosConfig";
+import {STATUS} from "../types/Status";
+export interface PostState{
+    post: Post | {},
+    posts: Post[];
+    postsResponse: PostsResponse
+    loading: boolean;
+    error: string | null;
+    status: STATUS | null
+
+}
+export interface Post{
+    _id?: string
     title: string,
-    body: string,
+    content: string,
+    author?: {
+        username: string,
+        _id: string,
+    },
+    createdAt?: Date,
+    creator_id?: string,
+    keywords: string[],
 }
-interface DataSate {
-    posts: Post[]
-    status: 'idle' | 'loading' | 'succeeded' | 'failed',
-    error: string | null,
 
+export interface PostsResponse{
+    posts: Post[],
+    total_posts: number,
+    total_pages: number,
+    current_pages: number
 }
 
-const initialState: DataSate = {
+const initialState:PostState = {
+    post: {},
     posts: [],
-    status: 'idle',
+    loading: false,
+    postsResponse: {
+        posts: [],
+        total_posts: 0,
+        total_pages: 0,
+        current_pages: 1,
+    },
+    status: null,
     error: null,
 }
 
-export const fetchData = createAsyncThunk('data/fetchData', async () => {
-    const response = await axios.get('http://localhost:3002/api/items')
-    return response.data
-})
 
+export const createPost = createAsyncThunk<Post, Post>("posts/createPost",
+    async(postData:Post, {rejectWithValue}) => {
+        try{
+            const response = await apiClient.post<Post>("http://localhost:6969/protected/post", {...postData, author: localStorage.getItem('userID')})
+            return response.data
+        }
+        catch(error: any){
+            console.log(rejectWithValue(error.response?.data))
+            return  rejectWithValue(error.response?.data)
+        }
+
+    })
+export const fetchPosts = createAsyncThunk< PostsResponse, {page: number, limit: number} | null>("posts/indexPost",
+    async (params: {page: number, limit: number}|null, {rejectWithValue}) => {
+    try {
+        const response = await apiClient.get("http://localhost:6969/protected/posts", {params} )
+        return response.data
+    }catch (err: any){
+        return rejectWithValue(err.response.data)
+    }
+
+})
 const postsSlice = createSlice({
-    name: 'data',
+    name: 'posts',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchData.pending, (state) => {
-                state.status = 'loading'
+            .addCase(createPost.pending, (state) => {
+                state.status = STATUS.PENDING
+                state.loading = true
             })
-            .addCase(fetchData.fulfilled, (state, action) => {
-                state.status = 'succeeded'
-                state.posts = action.payload
+            .addCase(createPost.fulfilled, (state, action) => {
+                state.status = STATUS.FULFILlED
+                state.post = action.payload
             })
-            .addCase(fetchData.rejected, (state, action) => {
-                state.status = 'failed'
+            .addCase(createPost.rejected, (state, action) => {
+                state.status = STATUS.REJECTED
                 state.error = action.error.message ?? 'something went wrong'
+            })
+        builder.addCase(fetchPosts.pending, (state) =>{
+            state.status = STATUS.PENDING
+            state.loading = true
+        })
+            .addCase(fetchPosts.fulfilled, (state, action) => {
+                state.status = STATUS.FULFILlED
+                state.loading = false
+                state.postsResponse = action.payload
+                state.posts = action.payload?.posts
+            })
+            .addCase(fetchPosts.rejected, (state, action) => {
+                state.status = STATUS.REJECTED
+                state.error = action.error.message ?? 'something went wrong'
+                state.loading = false
             })
 
     }
-
 })
- export default postsSlice.reducer
+export default postsSlice.reducer
