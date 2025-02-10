@@ -1,55 +1,46 @@
 import React, {useEffect, useState} from "react";
-import PostComponent from "../components/posts/PostComponent";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/index.module";
-import {fetchPosts} from "../features/postsSlice";
 import {getCurrentUser, User} from "../features/usersSlice";
+import PostsIndexComponent from "../components/posts/PostsIndexComponent";
+import {useNavigate} from "react-router-dom";
+import LoadingUi from "../components/ui/LoadingUi";
+import {AuthComponent} from "../components/auth/AuthComponent";
 
-const YourPosts: React.FC = () => {
+const ProfileView: React.FC = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>()
-    const {currentUser , loading, error} =useSelector((state: RootState) => state.user)
+    const {currentUser, loading, error} = useSelector((state: RootState) => state.user)
+    const [userId, setUserId] = useState<string | null>(null)
     useEffect(() => {
         if (!loading) {
-            dispatch(getCurrentUser()).then((dta) => console.log('ss',dta))
+            if (localStorage.getItem('userId')) {
+                setUserId(localStorage.getItem('userId'))
+                if (!currentUser)
+                dispatch(getCurrentUser())
+            }
         }
     }, [dispatch]);
 
-    if (loading) return <div>Loading...</div>;
     if (error) return <div className="text-red-500">Error: {error}</div>;
-
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">Profile Page</h1>
-            if(currentUser)
-            {/* User Details */}
-            {currentUser && (
-                <div className="mb-8 p-4 bg-white shadow rounded-md">
-                    {/*<h2 className="text-2xl font-bold">{currentUser.name}</h2>*/}
-                    <p className="text-gray-600">Email: {currentUser?.email}</p>
-                    <p className="text-gray-600">
-                        Joined: {new Date(currentUser?.createdAt).toLocaleDateString()}
-                    </p>
+        <div className=" w-full px-4 flex flex-col justify-between h-screen pt-[100px]">
+            <h2 className="text-3xl font-bold mb-6 mt-4">PROFILE PAGE</h2>
+            <div className="flex flex-row justify-between items-start">
+                <div className="flex flex-col justify-start items-start">
+                    <h3 className="ms-6 text-xl font-bold mb-6 mt-4 text-black dark:text-white">PROFILE DATA</h3>
+                    {currentUser && (
+                        <AuthComponent usage='Profile' currentUser={currentUser}/>
+                    )}
                 </div>
-            )}
-
-            {/* User Posts */}
-            {/*<h2 className="text-2xl font-bold mb-4">Your Posts</h2>*/}
-            {/*{posts.length > 0 ? (*/}
-            {/*    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">*/}
-            {/*        {posts.map((post) => (*/}
-            {/*            <li key={post._id} className="p-4 bg-white shadow rounded-md">*/}
-            {/*                <h3 className="text-xl font-bold">{post.title}</h3>*/}
-            {/*                <p className="text-gray-600">{post.content}</p>*/}
-            {/*                <p className="text-sm text-gray-500 mt-2">*/}
-            {/*                    Created: {new Date(post.createdAt).toLocaleDateString()}*/}
-            {/*                </p>*/}
-            {/*            </li>*/}
-            {/*        ))}*/}
-            {/*    </ul>*/}
-            {/*) : (*/}
-            {/*    <p className="text-gray-500">You have not created any posts yet.</p>*/}
-            {/*)}*/}
+                <div className="  flex-1 flex flex-col justify-start items-start">
+                    <h2 className="ms-6 text-xl font-bold mb-6 mt-4 text-black dark:text-white">YOUR POSTS</h2>
+                    {currentUser?._id &&
+                        <PostsIndexComponent userId={currentUser?._id}/>
+                    }
+                </div>
+            </div>
         </div>
     );
 }
-export default YourPosts
+export default ProfileView

@@ -1,41 +1,45 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import PostComponent from "./PostComponent";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../../store/index.module";
 import {fetchPosts} from "../../features/postsSlice";
-import Pagination from "../Pagination";
-
-const PostsIndexComponent: React.FC = () => {
+import Pagination from "../ui/Pagination";
+import {useNavigate} from "react-router-dom";
+interface PostsIndexProps{
+    userId?: string
+}
+const PostsIndexComponent: React.FC<PostsIndexProps> = ({userId}) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch<AppDispatch>()
-    const {posts, loading, error, status, postsResponse} = useSelector((state: RootState) => state.post)
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
+    const {posts, loading, error, postsResponse} = useSelector((state: RootState) => state.post)
+    const fetchPost = (page: number, limit: number, userId?: string) => {
+        dispatch(fetchPosts({page, limit, userId})).then((res: any) => {
+        })
+    }
     useEffect(() => {
         if (!loading) {
-            changePage(1).then(() => {
-                setCurrentPage(postsResponse?.current_pages)
-                setTotalPages(postsResponse?.total_pages)
-            })
+            if (!userId) {
+                fetchPost(1, 5)
+            }
+            else fetchPost(1, 5, userId)
         }
     }, [dispatch]);
     const changePage = async (page: number) => {
         try {
-            await dispatch(fetchPosts({page: page, limit:5}))
-            setCurrentPage(postsResponse?.current_pages)
-            setTotalPages(postsResponse?.total_pages)
+            if (!userId)
+                 fetchPost(page, 5)
+            else fetchPost(page, 5, userId)
         }
         catch (err){
-            console.log(err)
         }
     }
     if (loading) return <h3>Loading...</h3>;
     if (error) return <h3 className="text-red-800">error: {error}</h3>;
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold mb-4">Recent Posts</h1>
-            {posts.length > 0 ? (
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="container mx-auto px-4 pb-8 w-full h-full ">
+            {posts?.length > 0 ? (
+                <ul className="grid grid-cols-1 gap-4 w-full">
                     {posts.map((post) => (
                         <li key={post._id}>
                             <PostComponent post={post} />
@@ -43,9 +47,14 @@ const PostsIndexComponent: React.FC = () => {
                     ))}
                 </ul>
             ) : (
-                <p className="text-gray-500">No posts found yet.</p>
+                <p className="text-gray-500">No posts found yet.
+
+                </p>
             )}
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={(page) => {changePage(page)}}/>
+            {posts?.length > 0 && postsResponse?.meta.total_pages > 0 &&
+                (<Pagination currentPage={postsResponse?.meta?.current_page || 0} totalPages={postsResponse?.meta?.total_pages || 0} onPageChange={(page) => {changePage(page)}}/>)
+            }
+
 
         </div>
     );

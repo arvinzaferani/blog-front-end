@@ -3,10 +3,10 @@ import PostsIndexComponent from "../components/posts/PostsIndexComponent";
 
 const PostsView: React.FC = () => {
     return (
-        <div>
-            <header className="App-header">
-                <div><PostsIndexComponent/></div>
-            </header>
+        <div className=" w-full pt-[100px] flex flex-col justify-start items-center">
+            <h1 className="text-2xl font-bold mb-4">Recent Posts</h1>
+
+            <PostsIndexComponent/>
         </div>
     )
 }
