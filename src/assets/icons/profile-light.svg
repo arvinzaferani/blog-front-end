@@ -3,12 +3,12 @@
         fill="none"
         viewBox="0 0 32 32"
         stroke-width="1.5"
-        stroke="white"
+        stroke="black"
         class="w-8 h-8"
         width="32"
         height="32"
 >
-    <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1.5"/>
+    <circle cx="16" cy="16" r="14" stroke="black" stroke-width="1.5"/>
 
     <path
             stroke-linecap="round"
