@@ -7,27 +7,8 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({currentPage, totalPages, onPageChange,}) => {
-    // const pages: JSX.Element[] = []
     const handlePageClick = (page: number) => {
         onPageChange(page)
-    }
-    useEffect(() => {
-        console.log(totalPages, currentPage)
-    }, [totalPages, currentPage]);
-    console.log("totalPages:", totalPages, "currentPage:", currentPage);
-    const renderPageNumbers = () => {
-        return Array.from({length: totalPages}, (_, i) => i + 1).map((page) => (
-            <button
-                key={`pagination-${page}`}
-                onClick={() => onPageChange(page)}
-                className={`px-3 py-1 mx-1 ${
-                    currentPage === page
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-gray-700"
-                } rounded`}>
-                {page}
-            </button>
-        ));
     }
     return (
 
@@ -35,7 +16,7 @@ const Pagination: React.FC<PaginationProps> = ({currentPage, totalPages, onPageC
             <button
                 onClick={() => handlePageClick(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+                className="px-3 py-1 mx-1 bg-white text-gray-800 dark:bg-black dark:text-gray-400 rounded disabled:opacity-20"
             >
                 Prev
             </button>
@@ -44,10 +25,11 @@ const Pagination: React.FC<PaginationProps> = ({currentPage, totalPages, onPageC
                     <button
                         key={`pagination-${page}`}
                         onClick={() => onPageChange(page)}
+                        disabled={currentPage === page}
                         className={`px-3 py-1 mx-1 ${
                             currentPage === page
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-200 text-gray-700"
+                                ? "bg-gray-200 text-black dark:bg-white dark:text-black"
+                                : "bg-white text-gray-700 dark:bg-black dark:text-gray-500"
                         } rounded`}>
                         {page}
                     </button>
@@ -56,7 +38,7 @@ const Pagination: React.FC<PaginationProps> = ({currentPage, totalPages, onPageC
             <button
                 onClick={() => handlePageClick(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 mx-1 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+                className="px-3 py-1 mx-1 bg-white text-gray-800 dark:bg-black dark:text-gray-400 rounded disabled:opacity-20"
             >
                 Next
             </button>
