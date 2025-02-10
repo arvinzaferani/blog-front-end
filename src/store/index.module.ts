@@ -1,13 +1,15 @@
 import {configureStore} from "@reduxjs/toolkit";
-import dataReducer from "../features/postsSlice";
-import authReducer from "../features/authSlice";
 import postReducer from "../features/postsSlice";
+import userReducer from "../features/usersSlice";
+import alertReducer from "../features/alertSlice";
+import fileReducer from "../features/uploadSlice";
 
 const store = configureStore({
     reducer: {
-        data: dataReducer,
-        auth: authReducer,
         post: postReducer,
+        user: userReducer,
+        alerts: alertReducer,
+        file: fileReducer
     }
 })
 export type RootState = ReturnType<typeof store.getState>
