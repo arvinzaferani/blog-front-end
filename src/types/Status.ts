@@ -1,5 +1,9 @@
 export enum STATUS {
     PENDING = "pending",
-    FULFILlED = "fulfilled",
+    FULFILLED = "fulfilled",
     REJECTED = "rejected",
+}
+export enum ACTIOINS {
+    DELETE = 'Delete',
+    UPDATE = 'Update'
 }
