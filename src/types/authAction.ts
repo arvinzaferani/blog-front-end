@@ -26,6 +26,7 @@ export const Login = (username: string, password: string) => async (dispatch: Di
         const response = await axios.post('/api/login', {username, password})
         const token = response.data
         localStorage.setItem('token', token)
+        window.dispatchEvent(new Event("authChange"))
         dispatch({type: LOGIN_SUCCESS, payload: token})
     }
     catch (error: any){
