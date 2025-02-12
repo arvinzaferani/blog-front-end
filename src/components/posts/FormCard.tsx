@@ -14,21 +14,23 @@ const FormCard:React.FC<FormProps> = ({initialData, loading}) => {
     const [variant, setVariant] = useState <'create' | 'update'>('create')
     useEffect(() => {
         if (initialData) {
-            setVariant('update')
-            setFormData({
-                title: initialData.title,
-                content: initialData.content,
-                keywords: initialData.keywords,
-            })
+            setVariant('update');
+            setFormData((prev) => ({
+                ...prev,
+                title: initialData.title || "",
+                content: initialData.content || "",
+                keywords: initialData.keywords || [],
+            }));
+        } else {
+            setVariant('create');
         }
-        else
-            setVariant('create')
     }, [initialData]);
+
     const [formData, setFormData] = useState<Post>({
-        title: "",
-        content: "",
-        keywords: [],
-    })
+        title: initialData?.title || "",
+        content: initialData?.content || "",
+        keywords: initialData?.keywords || [],
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -136,7 +138,7 @@ const FormCard:React.FC<FormProps> = ({initialData, loading}) => {
                                 type="text"
                                 id="keywords"
                                 name="keywords"
-                                value={formData.keywords.join(', ')}
+                                value={formData.keywords?.join(', ') || ''}
                                 onChange={handleChange}
                                 className="w-full bg-white dark:bg-black text-black dark:text-white px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter the title"

@@ -21,7 +21,6 @@ export interface UserState {
     currentUser: Partial<User> | null
     user: Partial<User> | null
     token: string | null;
-    active_user_id: string | null;
     loading: boolean
     error: string | null
     status: STATUS | null
@@ -32,7 +31,6 @@ const initialState: UserState = {
     currentUser: null,
     user: null,
     token: localStorage.getItem('token'),
-    active_user_id: localStorage.getItem('userID'),
     loading: false,
     error: null,
     status: null,
@@ -138,7 +136,6 @@ const userSlice = createSlice({
             .addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
-                state.active_user_id = action.payload.user_id
                 if(action.payload?.token) {
                     localStorage.setItem('token', action.payload?.token)
                     window.dispatchEvent(new Event("authChange"))
@@ -163,7 +160,6 @@ const userSlice = createSlice({
             .addCase(register.fulfilled, (state, action: PayloadAction<any>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
-                state.active_user_id = action.payload?.user_id
                 state.error = null
                 if(action.payload?.token) {
                     localStorage.setItem('token', action.payload?.token)

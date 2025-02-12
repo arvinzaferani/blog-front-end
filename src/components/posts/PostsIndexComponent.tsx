@@ -12,23 +12,27 @@ const PostsIndexComponent: React.FC<PostsIndexProps> = ({userId}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch<AppDispatch>()
     const {posts, loading, error, postsResponse} = useSelector((state: RootState) => state.post)
-    const fetchPost = (page: number, limit: number, userId?: string) => {
-        dispatch(fetchPosts({page, limit, userId})).then((res: any) => {
-        })
+    const fetchPost = async (page: number, limit: number, userId?: string) => {
+        const response = await dispatch(fetchPosts({page, limit, userId}))
+        if (response.payload?.status === 401) {
+            localStorage.removeItem("userID")
+            localStorage.removeItem("token")
+            navigate('/auth')
+        }
     }
-    useEffect(() => {
+    useEffect( () => {
         if (!loading) {
             if (!userId) {
-                fetchPost(1, 5)
+                 fetchPost(1, 5)
             }
             else fetchPost(1, 5, userId)
         }
     }, [dispatch]);
-    const changePage = async (page: number) => {
+    const changePage =  (page: number) => {
         try {
             if (!userId)
-                 fetchPost(page, 5)
-            else fetchPost(page, 5, userId)
+                  fetchPost(page, 5)
+            else  fetchPost(page, 5, userId)
         }
         catch (err){
         }
