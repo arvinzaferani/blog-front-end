@@ -38,7 +38,9 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
             setProfileImageUrl(url);
     };
     const navigate = useNavigate();
-    const handleAction = async () => {
+    const handleAction = async (e: React.FormEvent) => {
+        e.preventDefault();
+
         try {
             if (variant === 'Login' && usage === 'Auth') {
                 await dispatch(login({credential, password})).unwrap()
@@ -113,7 +115,7 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                     </button>
                 </div>
             ) : (
-                <div
+                <form onSubmit={handleAction}
                     className="bg-white dark:bg-black border shadow-md shadow-gray-400 rounded p-6 max-w-md flex flex-col justify-start items-center w-full gap-6">
                     {usage === 'Auth' &&
                         <div className="w-full flex flex-row justify-center">
@@ -160,6 +162,7 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                                 type="text"
                                 placeholder="Username"
                                 value={username}
+                                required={variant === 'Register'}
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="w-full bg-white dark:bg-black text-black dark:text-white px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />}
@@ -167,6 +170,7 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                             <input
                                 type="text"
                                 placeholder="Username, Email, or Phone Number"
+                                required={variant === 'Login' && usage === 'Auth'}
                                 value={credential}
                                 onChange={(e) => setCredential(e.target.value)}
                                 className="w-full bg-white dark:bg-black text-black dark:text-white px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -176,6 +180,7 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                             type="password"
                             placeholder="Password"
                             value={password}
+                            required={usage !== 'Profile'}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full bg-white dark:bg-black text-black dark:text-white px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -184,6 +189,7 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                                 type="password"
                                 placeholder="Repeat Password"
                                 value={repeatPassword}
+                                required={variant === 'Register'}
                                 onChange={(e) => setRepeatPassword(e.target.value)}
                                 className="w-full bg-white dark:bg-black text-black dark:text-white px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -193,6 +199,7 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                                 type="email"
                                 placeholder="Email"
                                 value={email}
+                                required={variant === 'Register'}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full bg-white dark:bg-black text-black dark:text-white px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />}
@@ -204,18 +211,17 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
                     </div>
                     <div className="flex justify-between mt-6">
                         <button
-                            onClick={handleAction}
+                            type="submit"
                             className="px-6 py-2 bg-white dark:bg-black text-black dark:text-white border rounded hover:bg-white hover:text-black duration-300"
                         >
-                            {variant === 'Login' && usage === 'Auth' &&
-                                'Login'}
+                            {variant === 'Login' && usage === 'Auth' && 'Login'}
                             {variant === 'Register' && usage === 'Auth' && 'Register'}
                             {usage === 'Profile' && 'Updated'}
                         </button>
 
                     </div>
 
-                </div>
+                </form>
             )}
         </div>
     );

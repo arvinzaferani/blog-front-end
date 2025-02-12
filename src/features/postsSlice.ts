@@ -61,7 +61,6 @@ export const createPost = createAsyncThunk("posts/createPost",
         try {
             const response:any = await apiClient.post("/protected/posts", {
                 ...postData,
-                author: localStorage.getItem('userID')
             })
             dispatch<any>(AlertSuccess({title: response?.success?.title, text: response?.success?.message}))
             return response.data
@@ -146,26 +145,30 @@ const postsSlice = createSlice({
         builder
             .addCase(createPost.pending, (state) => {
                 state.status = STATUS.PENDING
+                state.error = null
                 state.loading = true
             })
             .addCase(createPost.fulfilled, (state, action) => {
                 state.status = STATUS.FULFILLED
                 state.post = action.payload
+                state.error = null
+                state.loading = false
             })
             .addCase(createPost.rejected, (state, action: any) => {
                 state.status = STATUS.REJECTED
                 state.error = action?.payload?.message ?? 'something went wrong'
-
+                state.loading = false
             })
         builder.addCase(fetchPosts.pending, (state) => {
             state.status = STATUS.PENDING
             state.loading = true
+            state.error = null
         })
             .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<PostsResponse>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
                 state.postsResponse = action.payload
-
+                state.error = null
                 state.postsResponse = {
                     posts: action.payload?.posts,
                     meta: {
@@ -187,12 +190,13 @@ const postsSlice = createSlice({
             .addCase(deletePost.pending, (state) => {
                 state.status = STATUS.PENDING
                 state.loading = true
+                state.error = null
             })
             .addCase(deletePost.fulfilled, (state, action) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
                 const {id} = action.payload
-
+                state.error = null
                 state.posts = [...state.posts.filter(i => i._id !== id)]
             })
             .addCase(deletePost.rejected, (state, action: any) => {
@@ -203,11 +207,13 @@ const postsSlice = createSlice({
         builder.addCase(getPost.pending, (state) => {
             state.status = STATUS.PENDING
             state.loading = true
+            state.error = null
         })
             .addCase(getPost.fulfilled, (state, action: PayloadAction<{ post: Post }>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
                 state.post = action.payload.post
+                state.error = null
             })
             .addCase(getPost.rejected, (state, action: any) => {
                 state.status = STATUS.REJECTED

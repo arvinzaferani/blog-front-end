@@ -21,7 +21,6 @@ export interface UserState {
     currentUser: Partial<User> | null
     user: Partial<User> | null
     token: string | null;
-    active_user_id: string | null;
     loading: boolean
     error: string | null
     status: STATUS | null
@@ -32,7 +31,6 @@ const initialState: UserState = {
     currentUser: null,
     user: null,
     token: localStorage.getItem('token'),
-    active_user_id: localStorage.getItem('userID'),
     loading: false,
     error: null,
     status: null,
@@ -45,10 +43,9 @@ export const login = createAsyncThunk(
     async (payload: Partial<User>, { rejectWithValue, dispatch }) => {
         try {
             const response = await apiClient.post("/auth/login", payload);
-
             dispatch<any>(AlertSuccess({
-                title: response.data.success?.title || "Login Successful",
-                text: response.data.success?.message || "You have successfully logged in!",
+                title: response.data?.success?.title || "Login Successful",
+                text: response.data?.success?.message || "You have successfully logged in!",
             }));
 
             return response.data;
@@ -68,8 +65,9 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk('auth/register', async (payload: User, {rejectWithValue, dispatch}) =>  {
     try{
-        const response = await apiClient.post('/auth/register', payload)
-        dispatch<any>(AlertSuccess({title: response.data.success.title, text: response.data.success.message}))
+        const response: any = await apiClient.post('/auth/register', payload)
+        console.log(response.data?.success)
+        dispatch<any>(AlertSuccess({title: response?.success?.title, text: response?.success?.message}))
         return response?.data
     }
     catch(err: any){
@@ -123,6 +121,7 @@ const userSlice = createSlice({
             .addCase(getCurrentUser.fulfilled, (state, action) => {
                 state.status = STATUS.FULFILLED
                 state.currentUser = action.payload.user
+                state.error = null
                 state.loading = false
             })
             .addCase(getCurrentUser.rejected, (state, action: any) => {
@@ -137,12 +136,14 @@ const userSlice = createSlice({
             .addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
-                state.active_user_id = action.payload.user_id
-                if(action.payload?.token)
+                if(action.payload?.token) {
                     localStorage.setItem('token', action.payload?.token)
+                    window.dispatchEvent(new Event("authChange"))
+                }
                 if(action.payload?.user_id)
                     localStorage.setItem('userID', action.payload?.user_id)
                 state.code = action.payload?.status
+                state.error = null
                 state.currentUser = action.payload.user
             })
             .addCase(login.rejected, (state, action: any) => {
@@ -159,9 +160,11 @@ const userSlice = createSlice({
             .addCase(register.fulfilled, (state, action: PayloadAction<any>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
-                state.active_user_id = action.payload.user_id
-                if(action.payload?.token)
+                state.error = null
+                if(action.payload?.token) {
                     localStorage.setItem('token', action.payload?.token)
+                    window.dispatchEvent(new Event("authChange"))
+                }
                 if(action.payload?.user_id)
                     localStorage.setItem('userID', action.payload?.user_id)
                 state.code = action.payload?.status
@@ -180,7 +183,7 @@ const userSlice = createSlice({
             .addCase(updateCurrentUser.fulfilled, (state, action: PayloadAction<any>) => {
                 state.status = STATUS.FULFILLED
                 state.loading = false
-                console.log(action.payload.user)
+                state.error = null
                 state.currentUser = action.payload.user
             })
             .addCase(updateCurrentUser.rejected, (state, action: any) => {

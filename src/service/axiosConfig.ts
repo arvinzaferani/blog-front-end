@@ -19,8 +19,10 @@ apiClient.interceptors.request.use(axiosConfig,
 
 apiClient.interceptors.response.use(
     (response) => {
-        if (response.data?.jwt)
+        if (response.data?.token) {
             localStorage.setItem('token', response.data.jwt)
+            window.dispatchEvent(new Event("authChange"))
+        }
         return response.data;
 
     },

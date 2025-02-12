@@ -56,7 +56,7 @@ const PostComponent: React.FC<PostProps>= ({post}) => {
                         {post.author?.profile_image_url ?
                             <img className="w-[32px] h-[32px] rounded object-cover border border-gray-700 dark:border-gray-200" src={post.author?.profile_image_url} alt="user profile image"/>:
                             <img alt="profile icon" src={dark ? profileIconDark : profileIconLight}/>}
-                        <p className="text-gray-800 dark:text-gray-200  mb-4 text-wrap text-sm max-h-[300px] overflow-y-scroll pe-5 mb-0">{post.author?.username}</p>
+                        <p className="text-gray-800 dark:text-gray-200 text-wrap text-smd max-h-[300px] overflow-y-scroll pe-5 mb-0">{post.author?.username}</p>
                     </div>
                     <Dropdown ellipse options={actionOptions} onChange={handleDropdown}/>
                 </div>
