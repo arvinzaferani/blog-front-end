@@ -66,7 +66,6 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk('auth/register', async (payload: User, {rejectWithValue, dispatch}) =>  {
     try{
         const response: any = await apiClient.post('/auth/register', payload)
-        console.log(response.data?.success)
         dispatch<any>(AlertSuccess({title: response?.success?.title, text: response?.success?.message}))
         return response?.data
     }
@@ -151,7 +150,6 @@ const userSlice = createSlice({
                 state.error = action.payload?.message ?? 'something went wrong'
                 state.code = action.payload?.status
                 state.loading = false
-                console.log('rejected')
             })
             builder.addCase(register.pending, (state) => {
                 state.status = STATUS.PENDING
@@ -188,7 +186,6 @@ const userSlice = createSlice({
             })
             .addCase(updateCurrentUser.rejected, (state, action: any) => {
                 state.status = STATUS.REJECTED
-                console.log(action)
                 state.error = action?.payload?.message ?? 'something went wrong'
                 state.loading = false
             })

@@ -57,21 +57,17 @@ const fileSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(uploadFile.pending, (state) => {
-                console.log("UPLOAD Pending"); // 🔹 Debug log
                 state.status = STATUS.PENDING;
                 state.loading = true;
                 state.error = null;
             })
             .addCase(uploadFile.fulfilled, (state, action: PayloadAction<{ message: string; image_url: string }>) => {
-                console.log("UPLOAD filled", action.payload); // 🔹 Debug log
                 state.status = STATUS.FULFILLED;
                 state.message = action.payload.message;
-                console.log(action.payload)
                 state.image_url = action.payload?.image_url;
                 state.loading = false;
             })
             .addCase(uploadFile.rejected, (state, action) => {
-                console.log("UPLOAD REJECTED", action.payload);
                 state.status = STATUS.REJECTED;
                 state.error = typeof action.payload === "string" ? action.payload : "Something went wrong";
                 state.loading = false;

@@ -23,7 +23,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({onFileUploadUrl, placeholder
                 try {
                     await dispatch(uploadFile(file)).unwrap()
                 } catch (err) {
-                    console.log(err)
+                    return err
                 }
 
             }
