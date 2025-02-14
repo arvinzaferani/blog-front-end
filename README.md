@@ -1,48 +1,143 @@
-# multi-project-react
-react multi project 
-# Getting Started with Create React App
+# Blog Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the **frontend** for the Blog Project, built using **React, TypeScript, Redux, and Tailwind CSS**.  
+It provides an interactive user interface for **authentication, creating/editing posts, and viewing blog content**.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **User Authentication** (Login/Register with JWT)  
+- **Create, Read, Update, and Delete (CRUD) Posts**  
+- **Profile Management** (Update user details & profile image)  
+- **Dark Mode Support** (Using Tailwind & Next Themes)  
+- **File Uploads** (For profile images and post attachments)  
+- **Redux Toolkit for State Management**  
+- **Fully Responsive UI (Tailwind CSS)**  
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🛠 Installation & Setup
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 1️⃣ Clone the Repository  
+```bash
+git clone https://github.com/arvinzaferani/blog-front-end.git
+cd blog-front-end
+```
 
-### `npm test`
+### 2️⃣ Install Dependencies  
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3️⃣ Set Up Environment Variables  
+Create a **`.env`** file in the root directory and add:  
+```env
+VITE_API_BASE_URL=https://your-backend-api.com
+```
+Replace `https://your-backend-api.com` with your actual **backend URL**.
 
-### `npm run build`
+### 4️⃣ Start the Development Server  
+```bash
+npm run dev
+```
+The app will be available at **`http://localhost:5173`**.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Running with Docker  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 1️⃣ Build Docker Image  
+```bash
+docker build -t blog-frontend .
+```
 
-### `npm run eject`
+### 2️⃣ Run Docker Container  
+```bash
+docker run -p 3000:80 blog-frontend
+```
+Now, the frontend will be available at **`http://localhost:3000`**.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📖 Project Structure  
+```
+blog-front-end/
+│── src/
+│   ├── components/        # Reusable UI Components
+│   ├── features/          # Redux Slices (Auth, Posts, Alerts)
+│   ├── views/             # Page Views (Home, Profile, Login)
+│   ├── router/            # React Router Configuration
+│   ├── store/             # Redux Store Setup
+│   ├── service/           # API Calls (Axios)
+│   ├── assets/            # Images, Icons, and Static Files
+│   ├── types/             # TypeScript Interfaces & Types
+│   ├── App.tsx            # Main Application Component
+│   ├── main.tsx           # Root File
+│── public/                # Static Assets
+│── .env                   # Environment Variables
+│── package.json           # Project Dependencies
+│── tailwind.config.js      # Tailwind CSS Configuration
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 📖 API Endpoints (Consumes Backend API)  
 
-## Learn More
+### **Auth Routes**  
+| Method | Endpoint          | Description               |
+|--------|------------------|---------------------------|
+| `POST` | `/auth/register` | Register a new user      |
+| `POST` | `/auth/login`    | Login and get JWT token  |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### **User Routes**  
+| Method | Endpoint       | Description                  |
+|--------|---------------|------------------------------|
+| `GET`  | `/users`      | Get current user info       |
+| `PUT`  | `/users`      | Update user profile         |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### **Post Routes**  
+| Method | Endpoint          | Description                    |
+|--------|------------------|--------------------------------|
+| `POST` | `/posts`        | Create a new post             |
+| `GET`  | `/posts`        | Get all posts                 |
+| `GET`  | `/posts/:id`    | Get a single post by ID       |
+| `PUT`  | `/posts/:id`    | Update a post                 |
+| `DELETE` | `/posts/:id`  | Delete a post                 |
+
+### **File Upload Route**  
+| Method | Endpoint          | Description            |
+|--------|------------------|------------------------|
+| `POST` | `/upload`        | Upload a file         |
+
+---
+
+## 🛠 Technologies Used  
+
+- **React (Vite)** - Fast frontend development  
+- **TypeScript** - Type safety and better development experience  
+- **Redux Toolkit** - State management  
+- **React Router** - Frontend routing  
+- **Tailwind CSS** - Styling and responsive design  
+- **Axios** - API calls to the backend  
+- **Docker** - Containerization for easy deployment  
+
+---
+
+## 🎯 Contributing  
+
+Contributions are welcome! Please follow these steps:  
+1. **Fork** the repo  
+2. **Create a new branch** (`feature-new`)  
+3. **Commit your changes** (`git commit -m "Add new feature"`)  
+4. **Push to your branch** (`git push origin feature-new`)  
+5. **Open a pull request**  
+
+---
+
+## 📜 License  
+This project is licensed under the **MIT License**.  
+
+---
+
+## 🌎 Contact  
+📧 **Email:** [arzaferani@gmail.com](mailto:arzaferani@gmail.com)  
+🔗 **GitHub:** [arvinzaferani](https://github.com/arvinzaferani)  
