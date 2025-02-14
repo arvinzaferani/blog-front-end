@@ -45,7 +45,6 @@ export const AuthComponent: React.FC<AuthComponentProps> = ({usage, currentUser}
             if (variant === 'Login' && usage === 'Auth') {
                 await dispatch(login({credential, password})).unwrap()
                 resetForm()
-                console.log('login')
                 navigate(`/posts`);
             } else if (variant === 'Register' && usage === 'Auth') {
                 if (password !== repeatPassword) {
