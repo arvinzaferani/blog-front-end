@@ -45,7 +45,7 @@ const PostsIndexComponent: React.FC<PostsIndexProps> = ({userId}) => {
                 <ul className="grid grid-cols-1 gap-4 w-full">
                     {posts.map((post) => (
                         <li key={post._id}>
-                            <PostComponent post={post} />
+                            <PostComponent post={post} userId={userId} />
                         </li>
                     ))}
                 </ul>

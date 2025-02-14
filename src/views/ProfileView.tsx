@@ -41,7 +41,7 @@ const ProfileView: React.FC = () => {
                 <div className="  flex-1 flex flex-col justify-start items-start">
                     <h2 className="ms-6 text-xl font-bold mb-6 mt-4 text-black dark:text-white">YOUR POSTS</h2>
                     {currentUser?._id &&
-                        <PostsIndexComponent userId={currentUser?._id}/>
+                        <PostsIndexComponent userId="1"/>
                     }
                 </div>
             </div>

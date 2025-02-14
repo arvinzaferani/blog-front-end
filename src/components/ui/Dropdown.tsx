@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import ellipseDarkIcon from "../../assets/icons/Ellipse-dark.svg";
 import ellipseLightIcon from "../../assets/icons/Ellipse-light.svg";
+import {ACTIOINS} from "../../types/Status";
 
 interface DropdownProps {
     options: OptionType[];
@@ -70,19 +71,26 @@ const Dropdown: React.FC<DropdownProps> = ({
             </button>
 
             {isOpen && (
-                <ul className="absolute z-10 mt-1  w-[170px] mx-[-132px] bg-white border border-gray-200 rounded shadow-lg">
+                <ul className="absolute z-10 mt-1  w-[170px] mx-[-132px] bg-white border rounded-sm border-gray-200 shadow-lg">
                     {options.map((option, index) => (
                         <li
                             key={index}
                             className="w-full p-0"
                         >
-                            <button
+                            {option.name === ACTIOINS.DELETE ? <button
                                 disabled={option.disabled}
-                                className="px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer w-full flex flex-row justify-start"
+                                className="px-4 py-2 text-sm  hover:bg-gray-100 cursor-pointer w-full flex flex-row justify-start dark:bg-black text-red-800 dark:text-red-600 hover:dark:bg-gray-800 transition "
                                 onClick={() => handleOptionClick(option.name)}
                             >
                                 {option.name}
-                            </button>
+                            </button> :
+                                <button
+                                disabled={option.disabled}
+                            className="px-4 py-2 text-sm  hover:bg-gray-100 cursor-pointer w-full flex flex-row justify-start dark:bg-black text-black dark:text-white hover:dark:bg-gray-800 transition"
+                            onClick={() => handleOptionClick(option.name)}
+                        >
+                            {option.name}
+                        </button>}
                         </li>
                     ))}
                 </ul>
